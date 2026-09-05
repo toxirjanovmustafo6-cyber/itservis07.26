@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IT Servis 07.26 - Tug'ilgan Kunlar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="bg-gray-100 min-h-screen text-gray-800 flex flex-col">
+    <header class="bg-indigo-600 text-white p-4 shadow-md">
+      <div class="max-w-4xl mx-auto flex justify-between items-center">
+        <h1 class="text-xl md:text-2xl font-bold tracking-wide">
+          IT Servis 07.26
+        </h1>
+        
+      </div>
+    </header>
+
+    <main class="max-w-4xl w-full mx-auto p-4 flex-grow">
+      <div id="alertsContainer" class="mb-6 space-y-2"></div>
+
+      <div class="bg-white rounded-lg shadow p-4 md:p-6">
+        <h2
+          class="text-lg font-bold mb-4 text-gray-700 flex items-center gap-2"
+        >
+          <i class="fa-solid fa-cake-candles text-indigo-500"></i> Kursdoshlar
+          Ro'yxati
+        </h2>
+        <div
+          id="studentList"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4"
+        ></div>
+        <p id="emptyMsg" class="text-center text-gray-500 py-8 hidden">
+          Hozircha ma'lumot kiritilmagan.
+        </p>
+      </div>
+    </main>
+
+    <div
+      id="adminModal"
+      class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50"
+    >
+      <div
+        class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+          <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <i class="fa-solid fa-user-gear text-indigo-600"></i> Admin Panel
+          </h3>
+          <button
+            onclick="closeAdminModal()"
+            class="text-gray-400 hover:text-gray-600 text-2xl font-bold"
+          >
+            &times;
+          </button>
+        </div>
+
+        <form id="studentForm" onsubmit="addStudent(event)" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Ism va Familiya</label
+            >
+            <input
+              type="text"
+              id="fullname"
+              required
+              placeholder="Ali Valiyev"
+              class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Tug'ilgan kuni</label
+            >
+            <input
+              type="date"
+              id="dob"
+              required
+              class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Telefon raqam</label
+            >
+            <input
+              type="tel"
+              id="phone"
+              required
+              placeholder="+998901234567"
+              class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Instagram username (masalan: username)</label
+            >
+            <div class="flex">
+              <span
+                class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
+                >@</span
+              >
+              <input
+                type="text"
+                id="instagram"
+                required
+                placeholder="username"
+                class="w-full border rounded-r-lg p-2.5 outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition"
+          >
+            Qo'shish
+          </button>
+        </form>
+
+        <div class="mt-6 border-t pt-4">
+          <h4
+            class="font-bold text-gray-700 mb-3 text-sm uppercase tracking-wider"
+          >
+            Mavjud ma'lumotlar
+          </h4>
+          <div
+            id="adminStudentList"
+            class="space-y-2 max-h-48 overflow-y-auto"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const STORAGE_KEY = "it_servis_0726_students";
+      let students = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+      // Klaviatura qisqartmasi: Ctrl + Shift + X
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "x") {
+          e.preventDefault();
+          openAdminModal();
+        }
+      });
+
+      function openAdminModal() {
+        document.getElementById("adminModal").classList.remove("hidden");
+        document.getElementById("adminModal").classList.add("flex");
+        renderAdminList();
+      }
+
+      function closeAdminModal() {
+        document.getElementById("adminModal").classList.add("hidden");
+        document.getElementById("adminModal").classList.remove("flex");
+      }
+
+      // Saqlash
+      function saveToStorage() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+      }
+
+      // Talaba qo'shish
+      function addStudent(e) {
+        e.preventDefault();
+        const newStudent = {
+          id: Date.now(),
+          fullname: document.getElementById("fullname").value.trim(),
+          dob: document.getElementById("dob").value,
+          phone: document.getElementById("phone").value.trim(),
+          instagram: document
+            .getElementById("instagram")
+            .value.trim()
+            .replace("@", ""),
+        };
+
+        students.push(newStudent);
+        saveToStorage();
+        document.getElementById("studentForm").reset();
+        renderApp();
+        renderAdminList();
+      }
+
+      // O'chirish
+      function deleteStudent(id) {
+        if (confirm("Rostdan ham ushbu ma'lumotni o'chirmoqchimisiz?")) {
+          students = students.filter((s) => s.id !== id);
+          saveToStorage();
+          renderApp();
+          renderAdminList();
+        }
+      }
+
+      // Kun hisoblash mantiqi (Yaqinlashayotgan tug'ilgan kunlar uchun)
+      function getDaysUntilBirthday(dobString) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const dob = new Date(dobString);
+        const nextBirthday = new Date(
+          today.getFullYear(),
+          dob.getMonth(),
+          dob.getDate(),
+        );
+
+        if (nextBirthday < today) {
+          nextBirthday.setFullYear(today.getFullYear() + 1);
+        }
+
+        const diffTime = nextBirthday - today;
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      }
+
+      // Asosiy ekranni chizish
+      function renderApp() {
+        const listContainer = document.getElementById("studentList");
+        const alertsContainer = document.getElementById("alertsContainer");
+        const emptyMsg = document.getElementById("emptyMsg");
+
+        listContainer.innerHTML = "";
+        alertsContainer.innerHTML = "";
+
+        if (students.length === 0) {
+          emptyMsg.classList.remove("hidden");
+          return;
+        } else {
+          emptyMsg.classList.add("hidden");
+        }
+
+        // Tug'ilgan kuni yaqin qolganlar bo'yicha saralash
+        const sortedStudents = [...students].sort(
+          (a, b) => getDaysUntilBirthday(a.dob) - getDaysUntilBirthday(b.dob),
+        );
+
+        sortedStudents.forEach((student) => {
+          const daysLeft = getDaysUntilBirthday(student.dob);
+
+          // 10 kun yoki undan kam qolgan bo'lsa ogohlantirish banneri chiqarish
+          if (daysLeft <= 10) {
+            const alertBox = document.createElement("div");
+            alertBox.className =
+              "bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded shadow-sm flex items-center justify-between";
+
+            let dayText =
+              daysLeft === 0
+                ? "Bugun tug'ilgan kuni! 🎉"
+                : `${daysLeft} kun qoldi! 🎉`;
+            alertBox.innerHTML = `
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-bell text-amber-600"></i>
+              <span><b>${student.fullname}</b>ning tug'ilgan kuniga <b>${dayText}</b></span>
+            </div>
+            <a href="tel:${student.phone}" class="text-xs bg-amber-500 text-white px-2 py-1 rounded hover:bg-amber-600">Tabriklash</a>
+          `;
+            alertsContainer.appendChild(alertBox);
+          }
+
+          // Kartochka yaratish
+          const card = document.createElement("div");
+          card.className =
+            "bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition";
+
+          const formattedDate = new Date(student.dob).toLocaleDateString(
+            "uz-UZ",
+            { day: "numeric", month: "long" },
+          );
+
+          card.innerHTML = `
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="font-bold text-gray-800 text-lg">${student.fullname}</h3>
+            <span class="text-xs font-semibold px-2 py-1 bg-indigo-50 text-indigo-600 rounded-full">
+              ${daysLeft === 0 ? "Bugun!" : daysLeft + " kun qoldi"}
+            </span>
+          </div>
+          <p class="text-sm text-gray-600 mb-3">
+            <i class="fa-solid fa-calendar-day text-indigo-500 mr-1.5"></i>${formattedDate}
+          </p>
+          <div class="space-y-1.5 text-sm border-t pt-2">
+            <div>
+              <a href="tel:${student.phone}" class="text-gray-700 hover:text-indigo-600 flex items-center gap-2">
+                <i class="fa-solid fa-phone text-green-500"></i> ${student.phone}
+              </a>
+            </div>
+            <div>
+              <a href="https://instagram.com/${student.instagram}" target="_blank" class="text-gray-700 hover:text-indigo-600 flex items-center gap-2">
+                <i class="fa-brands fa-instagram text-pink-500"></i> @${student.instagram}
+              </a>
+            </div>
+          </div>
+        `;
+          listContainer.appendChild(card);
+        });
+      }
+
+      // Admin ro'yxatini chizish
+      function renderAdminList() {
+        const adminList = document.getElementById("adminStudentList");
+        adminList.innerHTML = "";
+
+        if (students.length === 0) {
+          adminList.innerHTML =
+            "<p class=\"text-xs text-gray-400 text-center\">Ma'lumotlar yo'q</p>";
+          return;
+        }
+
+        students.forEach((student) => {
+          const item = document.createElement("div");
+          item.className =
+            "flex justify-between items-center bg-gray-100 p-2 rounded text-sm";
+          item.innerHTML = `
+          <span class="truncate max-w-[200px] font-medium">${student.fullname}</span>
+          <button onclick="deleteStudent(${student.id})" class="text-red-500 hover:text-red-700 px-2 py-1 text-xs font-bold">
+            <i class="fa-solid fa-trash"></i> O'chirish
+          </button>
+        `;
+          adminList.appendChild(item);
+        });
+      }
+
+      // Dastlabki yuklanish
+      renderApp();
+    </script>
+  </body>
+</html>
