@@ -19,6 +19,34 @@
         </h1>
       </div>
     </header>
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: radial-gradient(circle at top right, #f8fafc, #e2e8f0);
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+      .gradient-header {
+        background: linear-gradient(
+          135deg,
+          #4f46e5 0%,
+          #7c3aed 50%,
+          #2563eb 100%
+        );
+      }
+      .hover-up {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .hover-up:hover {
+        transform: translateY(-4px);
+        box-shadow:
+          0 20px 25px -5px rgba(79, 70, 229, 0.1),
+          0 8px 10px -6px rgba(79, 70, 229, 0.1);
+      }
+    </style>
 
     <!-- Asosiy Kontent -->
     <main class="max-w-4xl w-full mx-auto p-4 flex-grow">
