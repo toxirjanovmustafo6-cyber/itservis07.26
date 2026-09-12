@@ -1,213 +1,226 @@
 <!doctype html>
 <html lang="uz">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IT Servis 07.26 - Tug'ilgan Kunlar</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-  </head>
-  <body class="bg-gray-100 min-h-screen text-gray-800 flex flex-col">
-    <!-- Header -->
-    <header class="bg-indigo-600 text-white p-4 shadow-md">
-      <div class="max-w-4xl mx-auto flex justify-center items-center">
-        <h1 class="text-xl md:text-2xl font-bold tracking-wide">
-          IT Servis 07.26
-        </h1>
-      </div>
-    </header>
-    <style>
-      body {
-        font-family: "Plus Jakarta Sans", sans-serif;
-        background: radial-gradient(circle at top right, #f8fafc, #e2e8f0);
-      }
-      .glass-card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-      }
-      .gradient-header {
-        background: linear-gradient(
-          135deg,
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IT Servis 07.26 - Tug'ilgan Kunlar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-100 min-h-screen text-gray-800 flex flex-col">
+  <!-- Header -->
+  <header class="bg-indigo-600 text-white p-4 shadow-md">
+    <div class="max-w-4xl mx-auto flex justify-center items-center">
+      <h1 class="text-xl md:text-2xl font-bold tracking-wide">
+        IT Servis 07.26
+      </h1>
+    </div>
+  </header>
+  <style>
+    body {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      background: radial-gradient(circle at top right, #f8fafc, #e2e8f0);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .gradient-header {
+      background: linear-gradient(135deg,
           #4f46e5 0%,
           #7c3aed 50%,
-          #2563eb 100%
-        );
-      }
-      .hover-up {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .hover-up:hover {
-        transform: translateY(-4px);
-        box-shadow:
-          0 20px 25px -5px rgba(79, 70, 229, 0.1),
-          0 8px 10px -6px rgba(79, 70, 229, 0.1);
-      }
-    </style>
+          #2563eb 100%);
+    }
 
-    <!-- Asosiy Kontent -->
-    <main class="max-w-4xl w-full mx-auto p-4 flex-grow">
-      <!-- Ogohlantirishlar Bo'limi (10 kun qolganda chiqariladi) -->
-      <div id="alertsContainer" class="mb-6 space-y-2"></div>
+    .hover-up {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-      <!-- Kursdoshlar Ro'yxati -->
-      <div class="bg-white rounded-lg shadow p-4 md:p-6">
-        <h2
-          class="text-lg font-bold mb-4 text-gray-700 flex items-center gap-2"
-        >
-          <i class="fa-solid fa-cake-candles text-indigo-500"></i> Kursdoshlar
-          Ro'yxati
-        </h2>
-        <div id="studentList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- JS orqali kartochkalar chiqariladi -->
-        </div>
-        <p id="emptyMsg" class="text-center text-gray-500 py-8 hidden">
-          Hozircha ma'lumot kiritilmagan.
-        </p>
+    .hover-up:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 20px 25px -5px rgba(79, 70, 229, 0.1),
+        0 8px 10px -6px rgba(79, 70, 229, 0.1);
+    }
+  </style>
+
+  <!-- Asosiy Kontent -->
+  <main class="max-w-4xl w-full mx-auto p-4 flex-grow">
+    <!-- Ogohlantirishlar Bo'limi (10 kun qolganda chiqariladi) -->
+    <div id="alertsContainer" class="mb-6 space-y-2"></div>
+
+    <!-- Kursdoshlar Ro'yxati -->
+    <div class="bg-white rounded-lg shadow p-4 md:p-6">
+      <h2 class="text-lg font-bold mb-4 text-gray-700 flex items-center gap-2">
+        <i class="fa-solid fa-cake-candles text-indigo-500"></i> Kursdoshlar
+        Ro'yxati
+      </h2>
+      <div id="studentList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- JS orqali kartochkalar chiqariladi -->
       </div>
-    </main>
+      <p id="emptyMsg" class="text-center text-gray-500 py-8 hidden">
+        Hozircha ma'lumot kiritilmagan.
+      </p>
+    </div>
+  </main>
 
-    <script>
-      // MA'LUMOTLARNI SHU YERGA QO'LDA QO'SHASIZ
-      const students = [
-        {
-          id: 1,
-          fullname: "Mustafo Toxirjanov",
-          dob: "2010-01-12", // Format: YYYY-MM-DD (Yil-Oy-Kun)
-          phone: "+998943106767",
-          instagram: "toxirjanoovv",
-        },
-        // Yangi o'quvchi qo'shish uchun shunchaki nusxa oling va ma'lumotlarini o'zgartiring:
+  <script>
+    // MA'LUMOTLARNI SHU YERGA QO'LDA QO'SHASIZ
+    const students = [
+      {
+        id: 1,
+        fullname: "Mustafo Toxirjanov",
+        dob: "2010-01-12", // Format: YYYY-MM-DD (Yil-Oy-Kun)
+        phone: "+998943106767",
+        instagram: "toxirjanoovv",
+      },
+      // Yangi o'quvchi qo'shish uchun shunchaki nusxa oling va ma'lumotlarini o'zgartiring:
 
-        {
-          id: 2,
-          fullname: "shomurotov rozmat",
-          dob: "2010-09-08",
-          phone: "+998948880870",
-          instagram: "womurotovvv",
-        },
-        {
-          id: 3,
-          fullname: "sapayeva zarnigor",
-          dob: "2010-05-16",
-          phone: "+99899 270 85 58 ",
-          instagram: "xamdvna_o1o ",
-        },
-        {
-          id: 4,
-          fullname: "atajanov umar",
-          dob: "2010-01-30",
-          phone: "+99891 433 13 14 ",
-          instagram: "operatronik ",
-        },
-        {
-          id: 5,
-          fullname: "hajiqurbanov joshqin",
-          dob: "2010-09-15",
-          phone: "+998938465254 ",
-          instagram: "xqbvc7 ",
-        },
-        {
-          id: 6,
-          fullname: "Sharifboyev Nursulton",
-          dob: "2010-10-16",
-          phone: "+998936506119 ",
-          instagram: "nursulton.ea ",
-        },
-        {
-          id: 7,
-          fullname: "Sadullayev Jahongir",
-          dob: "2010-10-16",
-          phone: "+998936506119 ",
-          instagram: "nursulton.ea ",
-        },
-        {
-          id: 8,
-          fullname: "Ahmedjonov Samandar",
-          dob: "2010-09-20",
-          phone: "+998975170304 ",
-          instagram: "s.akhmedjonov ",
-        },
-      ];
+      {
+        id: 2,
+        fullname: "shomurotov rozmat",
+        dob: "2010-09-08",
+        phone: "+998948880870",
+        instagram: "womurotovvv",
+      },
+      {
+        id: 3,
+        fullname: "sapayeva zarnigor",
+        dob: "2010-05-16",
+        phone: "+99899 270 85 58 ",
+        instagram: "xamdvna_o1o ",
+      },
+      {
+        id: 4,
+        fullname: "atajanov umar",
+        dob: "2010-01-30",
+        phone: "+99891 433 13 14 ",
+        instagram: "operatronik ",
+      },
+      {
+        id: 5,
+        fullname: "hajiqurbanov joshqin",
+        dob: "2010-09-15",
+        phone: "+998938465254 ",
+        instagram: "xqbvc7 ",
+      },
+      {
+        id: 6,
+        fullname: "Sharifboyev Nursulton",
+        dob: "2010-10-16",
+        phone: "+998936506119 ",
+        instagram: "nursulton.ea ",
+      },
+      {
+        id: 7,
+        fullname: "Sadullayev Jahongir",
+        dob: "2010-10-16",
+        phone: "+998936506119 ",
+        instagram: "nursulton.ea ",
+      },
+      {
+        id: 8,
+        fullname: "Ahmedjonov Samandar",
+        dob: "2010-09-20",
+        phone: "+998975170304 ",
+        instagram: "s.akhmedjonov ",
+      },
+      {
+        id: 9,
+        fullname: "Ozodboyeva Diana",
+        dob: "2010-09-14",
+        phone: "+99888 307 1823 ",
+        instagram: "omadbekovna_d ",
+      },
+      {
+        id: 10,
+        fullname: "Matrasulova Maxliyo",
+        dob: "2010-01-27",
+        phone: "+998943898060 ",
+        instagram: "makl_iiy",
+      },
+    ]
 
-      // Tug'ilgan kungacha qolgan kunlarni hisoblash mantiqi
-      function getDaysUntilBirthday(dobString) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+    // Tug'ilgan kungacha qolgan kunlarni hisoblash mantiqi
+    function getDaysUntilBirthday(dobString) {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
 
-        const dob = new Date(dobString);
-        const nextBirthday = new Date(
-          today.getFullYear(),
-          dob.getMonth(),
-          dob.getDate(),
-        );
+      const dob = new Date(dobString)
+      const nextBirthday = new Date(
+        today.getFullYear(),
+        dob.getMonth(),
+        dob.getDate(),
+      )
 
-        if (nextBirthday < today) {
-          nextBirthday.setFullYear(today.getFullYear() + 1);
-        }
-
-        const diffTime = nextBirthday - today;
-        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (nextBirthday < today) {
+        nextBirthday.setFullYear(today.getFullYear() + 1)
       }
 
-      // Ekran ko'rinishini hosil qilish
-      function renderApp() {
-        const listContainer = document.getElementById("studentList");
-        const alertsContainer = document.getElementById("alertsContainer");
-        const emptyMsg = document.getElementById("emptyMsg");
+      const diffTime = nextBirthday - today
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    }
 
-        listContainer.innerHTML = "";
-        alertsContainer.innerHTML = "";
+    // Ekran ko'rinishini hosil qilish
+    function renderApp() {
+      const listContainer = document.getElementById("studentList")
+      const alertsContainer = document.getElementById("alertsContainer")
+      const emptyMsg = document.getElementById("emptyMsg")
 
-        if (students.length === 0) {
-          emptyMsg.classList.remove("hidden");
-          return;
-        } else {
-          emptyMsg.classList.add("hidden");
-        }
+      listContainer.innerHTML = ""
+      alertsContainer.innerHTML = ""
 
-        // Tug'ilgan kuni yaqin qolganlar bo'yicha saralash
-        const sortedStudents = [...students].sort(
-          (a, b) => getDaysUntilBirthday(a.dob) - getDaysUntilBirthday(b.dob),
-        );
+      if (students.length === 0) {
+        emptyMsg.classList.remove("hidden")
+        return
+      } else {
+        emptyMsg.classList.add("hidden")
+      }
 
-        sortedStudents.forEach((student) => {
-          const daysLeft = getDaysUntilBirthday(student.dob);
+      // Tug'ilgan kuni yaqin qolganlar bo'yicha saralash
+      const sortedStudents = [...students].sort(
+        (a, b) => getDaysUntilBirthday(a.dob) - getDaysUntilBirthday(b.dob),
+      )
 
-          // 10 kun yoki undan kam qolgan bo'lsa ogohlantirish banneri chiqarish
-          if (daysLeft <= 10) {
-            const alertBox = document.createElement("div");
-            alertBox.className =
-              "bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded shadow-sm flex items-center justify-between";
+      sortedStudents.forEach((student) => {
+        const daysLeft = getDaysUntilBirthday(student.dob)
 
-            let dayText =
-              daysLeft === 0
-                ? "Bugun tug'ilgan kuni! 🎉"
-                : `${daysLeft} kun qoldi! 🎉`;
-            alertBox.innerHTML = `
+        // 10 kun yoki undan kam qolgan bo'lsa ogohlantirish banneri chiqarish
+        if (daysLeft <= 10) {
+          const alertBox = document.createElement("div")
+          alertBox.className =
+            "bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded shadow-sm flex items-center justify-between"
+
+          let dayText =
+            daysLeft === 0
+              ? "Bugun tug'ilgan kuni! 🎉"
+              : `${daysLeft} kun qoldi! 🎉`
+          alertBox.innerHTML = `
             <div class="flex items-center gap-2">
               <i class="fa-solid fa-bell text-amber-600"></i>
               <span><b>${student.fullname}</b>ning tug'ilgan kuniga <b>${dayText}</b></span>
             </div>
             <a href="tel:${student.phone}" class="text-xs bg-amber-500 text-white px-2 py-1 rounded hover:bg-amber-600">Tabriklash</a>
-          `;
-            alertsContainer.appendChild(alertBox);
-          }
+          `
+          alertsContainer.appendChild(alertBox)
+        }
 
-          // Kartochka yaratish
-          const card = document.createElement("div");
-          card.className =
-            "bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition";
+        // Kartochka yaratish
+        const card = document.createElement("div")
+        card.className =
+          "bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition"
 
-          const formattedDate = new Date(student.dob).toLocaleDateString(
-            "uz-UZ",
-            { day: "numeric", month: "long" },
-          );
+        const formattedDate = new Date(student.dob).toLocaleDateString(
+          "uz-UZ",
+          { day: "numeric", month: "long" },
+        )
 
-          card.innerHTML = `
+        card.innerHTML = `
           <div class="flex justify-between items-start mb-2">
             <h3 class="font-bold text-gray-800 text-lg">${student.fullname}</h3>
             <span class="text-xs font-semibold px-2 py-1 bg-indigo-50 text-indigo-600 rounded-full">
@@ -229,13 +242,14 @@
               </a>
             </div>
           </div>
-        `;
-          listContainer.appendChild(card);
-        });
-      }
+        `
+        listContainer.appendChild(card)
+      })
+    }
 
-      // Dasturni ishga tushirish
-      renderApp();
-    </script>
-  </body>
+    // Dasturni ishga tushirish
+    renderApp();
+  </script>
+</body>
+
 </html>
